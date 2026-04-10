@@ -1,1 +1,100 @@
+body {
+  width: 380px;
+  margin: 0;
+  padding: 16px;
+  box-sizing: border-box;
+  font-family: system-ui, sans-serif;
+  background: #ffffff;
+  color: #1f2937;
+}
 
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+.popup-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.popup-header h1 {
+  margin: 0;
+  font-size: 24px;
+  line-height: 1.1;
+}
+
+.subtitle {
+  margin: 4px 0 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.input-section,
+#result-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font: inherit;
+}
+
+textarea#idea-input {
+  min-height: 80px;
+  resize: vertical;
+}
+
+textarea#result-text {
+  min-height: 200px;
+  resize: vertical;
+  background: #f9f9f9;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#generate-btn {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+#insert-btn {
+  background: #16a34a;
+  color: #ffffff;
+}
+
+#regenerate-btn {
+  background: #ffffff;
+  color: #1f2937;
+  border-color: #d1d5db;
+}
+
+#error-text {
+  color: #dc2626;
+  font-size: 14px;
+}
+
+#status-text {
+  color: #6b7280;
+  font-size: 14px;
+  font-style: italic;
+}
+
+.hidden {
+  display: none;
+}
