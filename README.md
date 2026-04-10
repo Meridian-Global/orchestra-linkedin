@@ -2,6 +2,26 @@
 
 Chrome extension for generating LinkedIn posts with Orchestra AI and inserting them into the LinkedIn composer.
 
+## Current Stage
+
+The project is currently at the static UI shell stage.
+
+Implemented so far:
+
+- Manifest V3 extension scaffold
+- Shared local backend config via `config/config.js`
+- Static popup UI in `src/popup/popup.html` and `src/popup/popup.css`
+- Minimal MV3 service worker in `src/background/service_worker.js`
+- Placeholder extension icons in `icons/`
+
+Not implemented yet:
+
+- Popup interaction logic in `src/popup/popup.js`
+- Orchestra API client and SSE parsing in `src/api/orchestraClient.js`
+- LinkedIn composer insertion logic in `src/content/content.js`
+
+At this stage, the extension loads in Chrome, shows the popup shell, registers the service worker, and resolves the configured icons, but it does not generate or insert content yet.
+
 ## Overview
 
 `orchestra-linkedin` is a Manifest V3 Chrome extension that:

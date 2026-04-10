@@ -5,8 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Orchestra LinkedIn</title>
     <link rel="stylesheet" href="./popup.css" />
+    <script src="../../config/config.js"></script>
+    <script src="../api/orchestraClient.js"></script>
   </head>
   <body>
+    <main class="popup-shell">
+      <header class="popup-header">
+        <h1>Orchestra</h1>
+        <p class="subtitle">LinkedIn</p>
+      </header>
+
+      <section class="input-section">
+        <textarea
+          id="idea-input"
+          placeholder="What's your idea?"
+        ></textarea>
+        <button id="generate-btn" type="button">Generate</button>
+      </section>
+
+      <div id="status-text" class="hidden" aria-live="polite"></div>
+
+      <section id="result-section" class="hidden">
+        <textarea id="result-text" readonly></textarea>
+        <button id="insert-btn" type="button">Insert into Post</button>
+        <button id="regenerate-btn" type="button">Generate Again</button>
+      </section>
+
+      <div id="error-text" class="hidden" aria-live="polite"></div>
+    </main>
+
     <script src="./popup.js"></script>
   </body>
 </html>
