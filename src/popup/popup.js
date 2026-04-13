@@ -116,6 +116,55 @@ document.addEventListener('DOMContentLoaded', function () {
     ideaInput.focus();
   });
 
+  function attemptInsert(tabId, content, isRetry) {
+    chrome.tabs.sendMessage(
+      tabId,
+      { type: 'INSERT_LINKEDIN_POST', content: content },
+      function (response) {
+        if (chrome.runtime.lastError) {
+          if (!isRetry) {
+            injectContentScript(tabId, content);
+            return;
+          }
+          showError('Could not reach LinkedIn. Please refresh the page and try again.');
+          return;
+        }
+
+        if (response && response.success === true) {
+          showStatus('\u2713 Inserted!');
+          statusTimerId = window.setTimeout(function () {
+            hideStatus();
+          }, 2000);
+          return;
+        }
+
+        if (response && response.error) {
+          showError(response.error);
+          return;
+        }
+
+        showError('Could not insert content. Please refresh LinkedIn and try again.');
+      }
+    );
+  }
+
+  function injectContentScript(tabId, content) {
+    chrome.scripting.executeScript(
+      {
+        target: { tabId: tabId, allFrames: false },
+        files: ['config/config.js', 'src/content/content.js']
+      },
+      function () {
+        if (chrome.runtime.lastError) {
+          showError('Could not access the LinkedIn page. Please refresh and try again.');
+          return;
+        }
+
+        attemptInsert(tabId, content, true);
+      }
+    );
+  }
+
   insertBtn.addEventListener('click', function () {
     var content = resultText.value;
 
@@ -125,35 +174,16 @@ document.addEventListener('DOMContentLoaded', function () {
       var activeTab = tabs && tabs[0];
 
       if (!activeTab || !activeTab.id) {
-        showError('Could not reach LinkedIn tab. Make sure LinkedIn is open.');
+        showError('No active tab found. Make sure LinkedIn is open.');
         return;
       }
 
-      chrome.tabs.sendMessage(
-        activeTab.id,
-        { type: 'INSERT_LINKEDIN_POST', content: content },
-        function (response) {
-          if (chrome.runtime.lastError) {
-            showError('Could not reach LinkedIn tab. Make sure LinkedIn is open.');
-            return;
-          }
+      if (activeTab.url && activeTab.url.indexOf('linkedin.com') === -1) {
+        showError('Please navigate to LinkedIn before inserting.');
+        return;
+      }
 
-          if (response && response.success === true) {
-            showStatus('\u2713 Inserted!');
-            statusTimerId = window.setTimeout(function () {
-              hideStatus();
-            }, 2000);
-            return;
-          }
-
-          if (response && response.error) {
-            showError(response.error);
-            return;
-          }
-
-          showError('Could not reach LinkedIn tab. Make sure LinkedIn is open.');
-        }
-      );
+      attemptInsert(activeTab.id, content, false);
     });
   });
 });
