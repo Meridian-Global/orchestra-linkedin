@@ -9,6 +9,21 @@ document.addEventListener('DOMContentLoaded', function () {
   var errorText = document.getElementById('error-text');
   var statusTimerId = null;
 
+  // Restore persisted state
+  chrome.storage.local.get(['ideaInput', 'resultContent'], function (data) {
+    if (data.ideaInput) {
+      ideaInput.value = data.ideaInput;
+    }
+    if (data.resultContent) {
+      showResult(data.resultContent);
+    }
+  });
+
+  // Persist input as the user types
+  ideaInput.addEventListener('input', function () {
+    chrome.storage.local.set({ ideaInput: ideaInput.value });
+  });
+
   function showStatus(message) {
     if (statusTimerId) {
       window.clearTimeout(statusTimerId);
@@ -71,6 +86,7 @@ document.addEventListener('DOMContentLoaded', function () {
       function (linkedinContent) {
         hideStatus();
         showResult(linkedinContent);
+        chrome.storage.local.set({ resultContent: linkedinContent });
         generateBtn.disabled = false;
       },
       function (message) {
@@ -84,6 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
   regenerateBtn.addEventListener('click', function () {
     hideResult();
     hideError();
+    chrome.storage.local.remove('resultContent');
     ideaInput.focus();
   });
 
